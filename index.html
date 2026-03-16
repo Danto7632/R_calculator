@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>성적향상 장학금 계산기</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      background: #f6f7fb;
+      color: #1f2937;
+    }
+    .wrap {
+      max-width: 920px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 28px;
+    }
+    .sub {
+      margin: 0;
+      color: #6b7280;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #374151;
+    }
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      font-size: 16px;
+      outline: none;
+      transition: 0.2s ease;
+      background: #fff;
+    }
+    input:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 13px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    button:hover { transform: translateY(-1px); }
+    .primary {
+      background: #111827;
+      color: white;
+    }
+    .secondary {
+      background: #eef2ff;
+      color: #3730a3;
+    }
+    .result {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 24px;
+    }
+    .result-box {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .result-box h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: #6b7280;
+      font-weight: 600;
+    }
+    .value {
+      font-size: 26px;
+      font-weight: 800;
+      color: #111827;
+      word-break: keep-all;
+    }
+    .formula {
+      background: #f3f4f6;
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 18px;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+    th, td {
+      padding: 14px 12px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 15px;
+    }
+    th {
+      background: #f9fafb;
+      color: #374151;
+      font-weight: 700;
+    }
+    tr:last-child td { border-bottom: none; }
+    .note {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.7;
+    }
+    .highlight {
+      color: #4338ca;
+      font-weight: 700;
+    }
+    @media (max-width: 760px) {
+      .grid, .result {
+        grid-template-columns: 1fr;
+      }
+      .card {
+        padding: 22px;
+      }
+      h1 {
+        font-size: 24px;
+      }
+      .value {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" style="padding:18px 28px;">
+      <p class="note" style="margin:0; font-size:14px;">
+        Developer GitHub: <a href="https://github.com/Danto7632" target="_blank" style="color:#4338ca; text-decoration:none; font-weight:700;">danto7632</a>
+      </p>
+    </div>
+    <div class="card">
+      <h1>성적향상 장학금 계산기</h1>
+      <p class="sub">
+        직전학기 성적(A)과 당해학기 성적(B)을 입력하면 성적향상 환산점수(R)와 예상 장학금 구간을 계산합니다.
+      </p>
+
+      <div class="formula">
+        <strong>산출식</strong><br />
+        R = (B - A) / (2 - A/3)<br />
+        · A: 직전학기 성적(평점평균)<br />
+        · B: 당해학기 성적(평점평균)<br />
+        · 참고: <span class="highlight">A가 1.0 미만이면 1.0으로 적용</span>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label for="a">직전학기 성적 (A)</label>
+          <input type="number" id="a" step="0.01" min="0" max="4.5" placeholder="예: 2.35" />
+        </div>
+        <div>
+          <label for="b">당해학기 성적 (B)</label>
+          <input type="number" id="b" step="0.01" min="0" max="4.5" placeholder="예: 3.80" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="primary" onclick="calculateScholarship()">계산하기</button>
+        <button class="secondary" onclick="resetForm()">초기화</button>
+      </div>
+
+      <div class="result">
+        <div class="result-box">
+          <h3>적용된 A 값</h3>
+          <div class="value" id="appliedA">-</div>
+        </div>
+        <div class="result-box">
+          <h3>환산점수 R</h3>
+          <div class="value" id="rValue">-</div>
+        </div>
+        <div class="result-box">
+          <h3>예상 장학금</h3>
+          <div class="value" id="scholarship">-</div>
+        </div>
+      </div>
+
+      <p class="note" id="message">값을 입력한 뒤 계산하기를 눌러주세요.</p>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0; font-size:22px;">장학금 구간표</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>성적향상 환산점수(R) 구간</th>
+            <th>1인당 장학금액</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1.8 이상</td><td>1,200,000원</td></tr>
+          <tr><td>1.6 이상 ~ 1.8 미만</td><td>900,000원</td></tr>
+          <tr><td>1.4 이상 ~ 1.6 미만</td><td>700,000원</td></tr>
+          <tr><td>1.2 이상 ~ 1.4 미만</td><td>500,000원</td></tr>
+          <tr><td>1.0 이상 ~ 1.2 미만</td><td>300,000원</td></tr>
+          <tr><td>0.7 이상 ~ 1.0 미만</td><td>200,000원</td></tr>
+        </tbody>
+      </table>
+      <p class="note">※ 0.7 미만은 본 표 기준 장학금 지급 대상 아님으로 표시됩니다.</p>
+    </div>
+  </div>
+
+  <script>
+    function getScholarshipAmount(r) {
+      if (r >= 1.8) return "1,200,000원";
+      if (r >= 1.6) return "900,000원";
+      if (r >= 1.4) return "700,000원";
+      if (r >= 1.2) return "500,000원";
+      if (r >= 1.0) return "300,000원";
+      if (r >= 0.7) return "200,000원";
+      return "지급 대상 아님";
+    }
+
+    function calculateScholarship() {
+      const aInput = parseFloat(document.getElementById('a').value);
+      const bInput = parseFloat(document.getElementById('b').value);
+      const appliedAEl = document.getElementById('appliedA');
+      const rValueEl = document.getElementById('rValue');
+      const scholarshipEl = document.getElementById('scholarship');
+      const messageEl = document.getElementById('message');
+
+      if (isNaN(aInput) || isNaN(bInput)) {
+        appliedAEl.textContent = '-';
+        rValueEl.textContent = '-';
+        scholarshipEl.textContent = '-';
+        messageEl.textContent = 'A와 B 값을 모두 입력해주세요.';
+        return;
+      }
+
+      const appliedA = aInput < 1.0 ? 1.0 : aInput;
+      const denominator = 2 - appliedA / 3;
+
+      if (denominator === 0) {
+        appliedAEl.textContent = appliedA.toFixed(2);
+        rValueEl.textContent = '오류';
+        scholarshipEl.textContent = '-';
+        messageEl.textContent = '계산할 수 없는 값입니다. 입력값을 확인해주세요.';
+        return;
+      }
+
+      const r = (bInput - appliedA) / denominator;
+      const scholarship = getScholarshipAmount(r);
+
+      appliedAEl.textContent = appliedA.toFixed(2);
+      rValueEl.textContent = r.toFixed(3);
+      scholarshipEl.textContent = scholarship;
+
+      if (aInput < 1.0) {
+        messageEl.textContent = `직전학기 성적(A)이 1.0 미만이므로 계산 시 1.0으로 적용했습니다. 예상 장학금은 ${scholarship}입니다.`;
+      } else {
+        messageEl.textContent = `계산이 완료되었습니다. 예상 장학금은 ${scholarship}입니다.`;
+      }
+    }
+
+    function resetForm() {
+      document.getElementById('a').value = '';
+      document.getElementById('b').value = '';
+      document.getElementById('appliedA').textContent = '-';
+      document.getElementById('rValue').textContent = '-';
+      document.getElementById('scholarship').textContent = '-';
+      document.getElementById('message').textContent = '값을 입력한 뒤 계산하기를 눌러주세요.';
+    }
+  </script>
+</body>
+</html>
